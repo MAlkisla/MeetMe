@@ -1,5 +1,8 @@
+using MeetMe.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,9 +14,17 @@ namespace MeetMe
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            using (var scope = host.Services.CreateScope())
+            {
+                var serviceProvder = scope.ServiceProvider;
+                var roleManager = serviceProvder.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = serviceProvder.GetRequiredService<UserManager<ApplicationUser>>();
+                await ApplicationDbContextSeeder.SeedRolesAndUsersAsync(roleManager, userManager);
+            }
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
