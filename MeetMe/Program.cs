@@ -16,15 +16,8 @@ namespace MeetMe
     {
         public async static Task Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-            using (var scope = host.Services.CreateScope())
-            {
-                var serviceProvder = scope.ServiceProvider;
-                var roleManager = serviceProvder.GetRequiredService<RoleManager<IdentityRole>>();
-                var userManager = serviceProvder.GetRequiredService<UserManager<ApplicationUser>>();
-                await ApplicationDbContextSeeder.SeedRolesAndUsersAsync(roleManager, userManager);
-            }
-            host.Run();
+             (await CreateHostBuilder(args).Build().SeedAsync()).Run();
+            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

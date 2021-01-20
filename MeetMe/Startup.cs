@@ -33,10 +33,9 @@ namespace MeetMe
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             // https://github.com/dotnet-architecture/eShopOnWeb/blob/master/src/Web/Startup.cs
-            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddDefaultUI()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
         }
 
@@ -64,6 +63,12 @@ namespace MeetMe
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAreaControllerRoute(
+                   name: "adminRoute",
+                   areaName: "Admin",
+                   pattern: "Admin/{controller=Dashboard}/{action=Index}/{id?}"
+                 );
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

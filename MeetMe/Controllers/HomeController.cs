@@ -1,4 +1,5 @@
-﻿using MeetMe.Models;
+﻿using MeetMe.Data;
+using MeetMe.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +13,17 @@ namespace MeetMe.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationDbContext _db;
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext applicationDbContext)
         {
             _logger = logger;
+            _db = applicationDbContext;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var meetings = _db.Meetings.OrderBy(x => x.MeetingTime).ToList();
+            return View(meetings);
         }
 
         public IActionResult Privacy()
