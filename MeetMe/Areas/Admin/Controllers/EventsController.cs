@@ -1,5 +1,6 @@
 ﻿using MeetMe.Areas.Admin.Models;
 using MeetMe.Data;
+using MeetMe.Services;
 using MeetMe.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,11 @@ namespace MeetMe.Areas.Admin.Controllers
     [AutoValidateAntiforgeryToken]
     public class EventsController : AdminBaseController
     {
-        public EventsController(ApplicationDbContext dbContext) : base(dbContext)
+        private readonly HelperService helperService;
+
+        public EventsController(ApplicationDbContext dbContext, HelperService helperService) : base(dbContext)
         {
+            this.helperService = helperService;
         }
         public IActionResult Index()
         {
@@ -28,7 +32,7 @@ namespace MeetMe.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult New(NewMeetingViewModel vm, [FromServices] IWebHostEnvironment env )
+        public IActionResult New(NewMeetingViewModel vm, [FromServices] IWebHostEnvironment env)
         {
             if (ModelState.IsValid)
             {
@@ -37,7 +41,8 @@ namespace MeetMe.Areas.Admin.Controllers
                 {
                     fileName = vm.Photo.GenerateFileName();
                     var savePath = Path.Combine(env.WebRootPath, "img", fileName);
-                    vm.Photo.CopyTo(new FileStream(savePath, FileMode.Create));
+                    using FileStream fs =new FileStream(savePath, FileMode.Create);
+                    vm.Photo.CopyTo(fs);
                 }
                 var meeting = new Meeting()
                 {
@@ -49,8 +54,75 @@ namespace MeetMe.Areas.Admin.Controllers
                 };
                 _db.Meetings.Add(meeting);
                 _db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View();
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var meeting = _db.Meetings.Find(id);
+
+            if (meeting == null)
+            {
+                return NotFound();
+            }
+            var vm = new EditMeetingViewModel()
+            {
+                Id = meeting.Id,
+                Description = meeting.Description,
+                Title = meeting.Title,
+                Place = meeting.Place,
+                MeetingTime = meeting.MeetingTime,
+                ExistingPhotoPath = meeting.PhotoPath
+            };
+            return View(vm);
+
+        }
+
+        [HttpPost]
+        public IActionResult Edit(EditMeetingViewModel vm, [FromServices] IWebHostEnvironment env)
+        {
+            if (ModelState.IsValid)
+            {
+                string fileName = null;
+                if (vm.Photo != null && vm.Photo.Length > 0)
+                {
+                    fileName = vm.Photo.GenerateFileName();
+                    var savePath = Path.Combine(env.WebRootPath, "img", fileName);
+                    using FileStream fs = new FileStream(savePath, FileMode.Create);
+                    vm.Photo.CopyTo(fs);
+                }
+
+                var meeting = _db.Meetings.Find(vm.Id);
+                meeting.MeetingTime = vm.MeetingTime;
+                meeting.Description = vm.Description;
+                meeting.Place = vm.Place;
+                meeting.Title = vm.Title;
+                if (!string.IsNullOrEmpty(fileName))
+                {
+                    helperService.DeletePhoto(meeting.PhotoPath);
+                    meeting.PhotoPath = fileName;
+                }
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var meeting = _db.Meetings.Find(id);
+            if (meeting == null)
+            {
+                return NotFound();
+            }
+
+            helperService.DeletePhoto(meeting.PhotoPath);
+
+            _db.Meetings.Remove(meeting);
+            _db.SaveChanges();
+            return Ok();
         }
 
     }

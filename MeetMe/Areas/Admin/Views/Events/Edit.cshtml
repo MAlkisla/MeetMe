@@ -1,6 +1,6 @@
-﻿@model NewMeetingViewModel
+﻿@model EditMeetingViewModel
 @{
-    ViewData["Title"] = "New Meeting";
+    ViewData["Title"] = "Edit Meeting";
 }
 
 <div class="row">
@@ -40,9 +40,15 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputFile">File input</label>
+                        <div>
+                            <input type="hidden" asp-for="ExistingPhotoPath" />
+                            @{string showPreview = string.IsNullOrEmpty(Model.ExistingPhotoPath) ? "display: none" : ""; }
+                            <img src="~/img/@Model.ExistingPhotoPath" alt="@Model.Title" height="100" class="edit-meeting-photo-preview img-thumbnail mb-2" id="img-preview" style="@showPreview" />
+
+                        </div>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input asp-for="Photo" class="custom-file-input" id="exampleInputFile">
+                                <input asp-for="Photo" class="custom-file-input" id="exampleInputFile" data-preview-image-target="#img-preview">
                                 <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                             </div>
                             @*<div class="input-group-append">
@@ -55,7 +61,7 @@
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>
@@ -64,23 +70,17 @@
 </div>
 
 @section scripts {
-    <partial name = "_ValidationScriptsPartial" />
-    
+    <partial name="_ValidationScriptsPartial" />
+
     <script>
         bsCustomFileInput.init();
-        var d = new Date();
-        d.setHours(12);
-        d.setMinutes(0);
-        d.setSeconds(0);
-        d.setMilliseconds(0);
         //Date range picker
         $('#meetingtimetd').datetimepicker({
             icons: {
                 time: 'fas fa-clock',
             },
             //locale: 'tr',
-            format: 'DD.MM.YYYY HH:mm',
-            defaultDate: d
+            format: 'DD.MM.YYYY HH:mm'
         });
     </script>
 }

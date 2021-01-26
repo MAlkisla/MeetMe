@@ -12,7 +12,16 @@
     {
         <div class="col-md-6 mb-3">
             <div class="card flex-row-reverse">
-                <img src="~/img/@meeting.PhotoPath" class="meeting-img" alt="...">
+                @if (string.IsNullOrEmpty(meeting.PhotoPath))
+                {
+                    <img src="~/img/no-meeting.png" class="meeting-img" alt="">
+
+                }
+                else
+                {
+
+                    <img src="~/img/@meeting.PhotoPath" class="meeting-img" alt="@meeting.Title">
+                }
                 <div class="card-body">
                     <h5 class="card-title">@meeting.Title</h5>
                     <p class="card-text meeting-desc">@meeting.Description <br /></p>
