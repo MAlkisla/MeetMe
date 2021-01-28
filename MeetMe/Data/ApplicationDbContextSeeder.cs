@@ -50,6 +50,7 @@ namespace MeetMe.Data
                 {
                     //2 tane örnek etkinlik ekle
                     SeedMeetings(db);
+                    SeedMeetings(db, 121);
                 }
             }
             return host;
@@ -74,6 +75,22 @@ namespace MeetMe.Data
                     Place = "Congresium, Ankara",
                     MeetingTime = DateTime.Now.AddDays(30),
                     PhotoPath = "meeting2.png"
+                });
+                db.SaveChanges();
+            }
+        }
+        private static void SeedMeetings(ApplicationDbContext db, int count)
+        {
+            int currentCount = db.Meetings.Count();
+
+            for (int i = currentCount + 1; i <= count; i++)
+            {
+                db.Meetings.Add(new Meeting()
+                {
+                    Title = "Meeting " + i,
+                    Description = "Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel.",
+                    Place = "Sit amet, consectetur.",
+                    MeetingTime = DateTime.Now.AddDays(-i)
                 });
                 db.SaveChanges();
             }
