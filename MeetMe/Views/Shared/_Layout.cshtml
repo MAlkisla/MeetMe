@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
-    @await RenderSectionAsync("styles",false)
+    @await RenderSectionAsync("styles", false)
 </head>
 <body>
     <header>
@@ -51,9 +51,15 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - MeetMe - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container d-flex">
+            <div>
+                &copy; 2021 - MeetMe
+            </div>
+            <div class="ml-auto">
+                @await Component.InvokeAsync("UpcomingEvent")
+            </div>
         </div>
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

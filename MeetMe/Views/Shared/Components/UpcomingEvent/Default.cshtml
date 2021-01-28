@@ -1,0 +1,11 @@
+﻿@model Meeting
+
+@if (Model == null)
+{
+    <text>No upcoming event : </text>
+}
+else
+{
+    <text>Upcoming Event: @Model.Title (@Model.MeetingTime?.ToShortDateString()) </text>
+
+}
