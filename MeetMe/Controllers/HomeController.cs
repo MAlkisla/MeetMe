@@ -43,7 +43,7 @@ namespace MeetMe.Controllers
                     Place = x.Place,
                     IsJoined = loggedIn && x.Participants.Any(p => p.Id == userId)
                 })
-                .Skip((page - 1) *10)
+                .Skip((page - 1) * 10)
                 .Take(PageSize)
                 .ToList();
 
@@ -93,12 +93,14 @@ namespace MeetMe.Controllers
         }
 
         [Authorize]
+        [Route("MyMeetings")]
+
         public IActionResult MyMeetings()
         {
             var userId = User.Id(); // utilities ten geliyor ıd eklentisi
             return View(_db.Meetings.Where(x => x.Participants.Any(p => p.Id == userId)).ToList());
         }
-
+        [Route("Privacy")]
         public IActionResult Privacy()
         {
             return View();

@@ -76,7 +76,12 @@ namespace MeetMe
                    areaName: "Admin",
                    pattern: "Admin/{controller=Dashboard}/{action=Index}/{id?}"
                  );
-
+                // Bu yönteme gerek kalmadý cunku controllerda route vererek daha kolay
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //    pattern: "MyMeetings",
+                //    defaults: new { controller = "Home", action = "MyMeetings" });
+                    
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
