@@ -39,6 +39,7 @@ namespace MeetMe.Controllers
                     Title = x.Title,
                     Description = x.Description,
                     MeetingTime = x.MeetingTime,
+                    Slug = x.Slug,
                     PhotoPath = x.PhotoPath,
                     Place = x.Place,
                     IsJoined = loggedIn && x.Participants.Any(p => p.Id == userId)

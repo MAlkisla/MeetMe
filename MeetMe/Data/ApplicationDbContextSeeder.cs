@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MeetMe.Utilities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -64,6 +65,7 @@ namespace MeetMe.Data
                 db.Meetings.Add(new Meeting()
                 {
                     Title = "English Speaking Club",
+                    Slug = WebUtilities.URLFriendly("English Speaking Club"),
                     Description = "An English Club is a place for language learners to use English in a casual setting. Practising your skills in the classroom is important.",
                     Place = "Route Cafe, Ankara",
                     MeetingTime = DateTime.Now.AddDays(7),
@@ -72,6 +74,7 @@ namespace MeetMe.Data
                 db.Meetings.Add(new Meeting()
                 {
                     Title = "Environmental Pollution",
+                    Slug = WebUtilities.URLFriendly("Environmental Pollution"),
                     Description = "This conference aims to bring together leading academic scientists, researchers and research scholars to exchange and share their experiences and research results on all aspects of Environmental Pollution, Public Health and Impacts. ",
                     Place = "Congresium, Ankara",
                     MeetingTime = DateTime.Now.AddDays(30),
@@ -89,6 +92,7 @@ namespace MeetMe.Data
                 db.Meetings.Add(new Meeting()
                 {
                     Title = "Meeting " + i,
+                    Slug = WebUtilities.URLFriendly("Meeting " + i),
                     Description = "Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel.",
                     Place = "Sit amet, consectetur.",
                     MeetingTime = DateTime.Now.AddDays(-i)

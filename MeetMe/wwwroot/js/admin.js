@@ -33,3 +33,18 @@ $("[data-preview-image-target]").on("input", function (event) {
         }
     }
 });
+
+$("[data-slugify-target]").on("focusout", function () {
+    var target = $(this).data("slugify-target");
+    var text = $(this).val();
+    $.ajax({
+        type: "post",
+        url: baseUrl + "Admin/Slug/Generate",
+        data: { text: text },
+        success: function (data) {
+            if (!$(target).val()) {
+                $(target).val(data);
+            }
+        }
+    })
+});

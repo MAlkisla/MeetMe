@@ -47,6 +47,7 @@ namespace MeetMe.Areas.Admin.Controllers
                 var meeting = new Meeting()
                 {
                     Title = vm.Title,
+                    Slug = WebUtilities.URLFriendly(vm.Slug),
                     Description = vm.Description,
                     MeetingTime = vm.MeetingTime,
                     Place = vm.Place,
@@ -72,6 +73,7 @@ namespace MeetMe.Areas.Admin.Controllers
                 Id = meeting.Id,
                 Description = meeting.Description,
                 Title = meeting.Title,
+                Slug = meeting.Slug,
                 Place = meeting.Place,
                 MeetingTime = meeting.MeetingTime,
                 ExistingPhotoPath = meeting.PhotoPath
@@ -99,6 +101,8 @@ namespace MeetMe.Areas.Admin.Controllers
                 meeting.Description = vm.Description;
                 meeting.Place = vm.Place;
                 meeting.Title = vm.Title;
+                meeting.Slug = WebUtilities.URLFriendly(vm.Slug);
+
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     helperService.DeletePhoto(meeting.PhotoPath);
